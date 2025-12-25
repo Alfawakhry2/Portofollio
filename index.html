@@ -4,336 +4,1037 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ahmed Taha - Backend Developer</title>
+    <title>Ahmed Taha - Backend Developer Portfolio</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Work+Sans:wght@400;500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap"
         rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
     <style>
         :root {
-            --primary: #0d6efd;
-            --dark: #212529;
-            --light: #f8f9fa;
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #8b5cf6;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --light: #f8fafc;
+            --text-gray: #64748b;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Poppins', sans-serif;
             color: var(--dark);
+            overflow-x: hidden;
+            background: var(--light);
         }
 
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-family: 'Work Sans', sans-serif;
-            font-weight: 700;
+        /* Loading Screen */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
         }
 
-        .navbar-brand {
-            font-weight: 700;
+        #loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+            color: white;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar Enhancement */
+        .navbar {
+            transition: all 0.3s ease;
+            padding: 1rem 0;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            padding: 0.5rem 0;
+        }
+
+        .navbar-brand img {
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover img {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .nav-link {
+            position: relative;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+            left: 0;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            z-index: -1;
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s infinite;
+        }
+
+        .shape-1 {
+            top: 10%;
+            left: 10%;
+            width: 100px;
+            height: 100px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            top: 60%;
+            right: 10%;
+            width: 150px;
+            height: 150px;
+            background: var(--secondary);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation-delay: 2s;
+        }
+
+        .shape-3 {
+            bottom: 10%;
+            left: 20%;
+            width: 80px;
+            height: 80px;
+            background: var(--accent);
+            transform: rotate(45deg);
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            33% {
+                transform: translateY(-30px) rotate(5deg);
+            }
+
+            66% {
+                transform: translateY(-15px) rotate(-5deg);
+            }
         }
 
         .profile-img {
-            max-width: 350px;
+            max-width: 400px;
             border-radius: 50%;
-            /* border: 5px solid var(--primary); */
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.3);
         }
 
-        .skill-card {
-            transition: transform 0.3s;
+        .profile-img::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: var(--gradient);
+            z-index: -1;
+            opacity: 0.3;
+            animation: pulse 3s ease-in-out infinite;
         }
 
-        .skill-card:hover {
-            transform: translateY(-5px);
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 0.5;
+            }
         }
 
-        .project-card {
-            transition: transform 0.3s;
+        .typed-cursor {
+            opacity: 1;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Buttons */
+        .btn-custom {
+            padding: 12px 32px;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-primary-custom {
+            background: var(--gradient);
+            border: none;
+            color: white;
+        }
+
+        .btn-primary-custom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
             height: 100%;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-primary-custom:hover::before {
+            left: 0;
+        }
+
+        .btn-outline-custom {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .btn-outline-custom:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Section Titles */
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 3rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about-card {
+            border-radius: 20px;
+            border: none;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .about-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            background: var(--gradient);
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-box:hover .stat-number {
+            -webkit-text-fill-color: white;
+        }
+
+        /* Skills Section */
+        .skill-item {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .skill-item:hover {
+            transform: translateX(10px);
+            box-shadow: var(--shadow);
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 10px;
+            width: 0;
+            transition: width 1.5s ease;
+        }
+
+        /* Experience Section */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+            text-align: left;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-right: auto;
+            text-align: right;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .timeline-icon {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 0 0 8px var(--light);
+            z-index: 1;
+        }
+
+        /* Services Section */
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover .service-icon {
+            transform: rotateY(360deg);
+        }
+
+        /* Portfolio Section */
+        .project-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 100%;
+            border: 1px solid #e2e8f0;
         }
 
         .project-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
         }
 
-        .testimonial-card {
-            min-height: 300px;
+        .project-image {
+            position: relative;
+            overflow: hidden;
+            height: 250px;
         }
 
-        .contact-card {
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.1);
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-card:hover .project-overlay {
+            opacity: 0.9;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-link {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .project-link:hover {
+            transform: scale(1.2);
+            color: var(--primary);
+        }
+
+        /* Certification Section */
+        .cert-card {
+            background: white;
             border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .cert-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .cert-image {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+        }
+
+        /* Contact Section */
+        .contact-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-info-item:hover {
+            background: var(--gradient);
+            color: white;
+            transform: translateX(10px);
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .contact-info-item:hover .contact-icon {
+            background: white;
+            color: var(--primary);
+        }
+
+        .form-control {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--gradient);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Scroll to Top Button */
+        #scrollTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        #scrollTop.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #scrollTop:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Badge Styling */
+        .badge {
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            border-radius: 20px;
+            margin: 0.25rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-content {
+                width: calc(100% - 80px);
+                margin-left: 80px !important;
+                text-align: left !important;
+            }
+
+            .timeline-icon {
+                left: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-img {
+                max-width: 300px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+
+        /* Custom Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Code Font for Tech Stack */
+        .tech-badge {
+            font-family: 'Fira Code', monospace;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .tech-badge:hover {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
         }
     </style>
 </head>
 
-<body class="bg-light">
+<body>
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <h3>Loading Portfolio...</h3>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-4 text-primary" href="#">
-                <img src="images/loho.png" alt="Logo" class="img-fluid" style="height: 60px; width: 60px;">
+            <a class="navbar-brand" href="#">
+                <img src="images/loho.png" alt="Logo" style="height: 60px; width: 60px;">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
                     <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
                     <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#testimonials">Testimonials</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#certifications">Certifications</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
+
     <!-- Hero Section -->
-    <section class="py-5 mt-5" id="home">
+    <section class="hero-section" id="home">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-md-6 order-md-1 order-2">
-                    <div class="p-4">
-                        <p class="text-muted mb-1">Hello, I'm</p>
-                        <h1 class="display-6 fw-bold text-primary">Ahmed Taha Mansour</h1>
-                        <h2 class="fs-4 mb-4">Software Engineer | Backend Developer</h2>
-                        <p class="lead text-muted mb-4">
-                            Backend Developer with strong expertise in PHP & Laravel, SQL databases , problem-solving ,
-                            C++,.
-                            Skilled in developing efficient and scalable web applications.
-                        </p>
-                        <a href="#portfolio" class="btn btn-primary btn-lg me-3">View My Work</a>
-                        <a href="https://www.linkedin.com/in/ahmed-taha-alfawakhry/"
-                            class="btn btn-outline-primary btn-lg mt-2">Contact Me</a>
+                <div class="col-lg-6 order-lg-1 order-2" data-aos="fade-right">
+                    <p class="text-muted mb-2" style="font-size: 1.1rem;">Hello, I'm</p>
+                    <h1 class="display-4 fw-bold mb-3"
+                        style="background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        Ahmed Taha Mansour
+                    </h1>
+                    <h2 class="h3 mb-4">
+                        <span id="typed-text"></span>
+                        <span class="typed-cursor">|</span>
+                    </h2>
+                    <p class="lead text-muted mb-4">
+                        Backend Developer with 1+ year experience specializing in PHP and Laravel, delivering scalable,
+                        secure, and production-ready backend systems. Expert in RESTful APIs, payment integrations,
+                        and multi-tenant architectures.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="#portfolio" class="btn btn-primary-custom btn-custom">
+                            <i class="fas fa-briefcase me-2"></i>View My Work
+                        </a>
+                        <a href="#contact" class="btn btn-outline-custom btn-custom">
+                            <i class="fas fa-envelope me-2"></i>Contact Me
+                        </a>
+                    </div>
+                    <div class="mt-4">
+                        <a href="https://www.linkedin.com/in/ahmed-taha-alfawakhry/" class="text-dark me-3"
+                            style="font-size: 1.5rem; transition: all 0.3s;">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://github.com/Alfawakhry2" class="text-dark"
+                            style="font-size: 1.5rem; transition: all 0.3s;">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.facebook.com/ahmed.taha.alfawakhry" class="text-dark mx-3"
+                            style="font-size: 1.5rem; transition: all 0.3s;">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://wa.me/201155346186" class="text-dark mx-1"
+                            style="font-size: 1.5rem; transition: all 0.3s;" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
                     </div>
                 </div>
-                <div class="col-md-6 order-md-2 order-1 text-center mb-4 mb-md-0">
-                    <img src="images/2.jpg" alt="Profile Pic" class="img-fluid profile-img shadow">
+                <div class="col-lg-6 order-lg-2 order-1 text-center mb-5 mb-lg-0" data-aos="fade-left">
+                    <img src="images/2.jpg" alt="Ahmed Taha" class="img-fluid profile-img">
                 </div>
             </div>
         </div>
     </section>
 
-    <section>
-        <div class="container">
-
-   
-                <!-- New Courses & Certifications Section -->
-                <div class="row mt-5">
-                    <div class="col-12">
-                        <h3 class="text-center mb-4">My Courses & Certifications</h3>
-                        
-                        <!-- Course 1 -->
-                        <div class="card mb-4 shadow-sm">
-                            <div class="row g-0">
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Backend Bootcamp</h5>
-                                        <p class="card-text">
-                                            <small class="text-muted">Route Academy - Completed Dec 2023</small>
-                                        </p>
-                                        <p class="card-text">
-                                             Comprehensive web development course covering<span class="text-primary"> PHP , SQL ,OOP , PDO , MVC , Wordpress , SDLC , Laravel.</span>
-                                        </p>
-                                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#certificateModal1">
-                                            View Certificate
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 d-flex align-items-center justify-content-center bg-light">
-                                    <img src="images/RouteCert.png" class="img-fluid rounded-start" alt="Course Thumbnail" style="max-height: 150px;">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Certificate Modals -->
-        <div class="modal fade" id="certificateModal1" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Web Development Bootcamp Certificate</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <img src="images/RouteCert.png" class="img-fluid" alt="Certificate">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <a href="images/Route_Certification.pdf" download class="btn btn-primary">Download</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="modal fade" id="certificateModal2" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Laravel Framework Mastery Certificate</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <img src="images/certificate2.jpg" class="img-fluid" alt="Certificate">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <a href="images/certificate2.jpg" download class="btn btn-primary">Download</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </section>
     <!-- About Section -->
     <section class="py-5 bg-white" id="about">
         <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-4 fw-bold">About Me</h2>
-                <div class="border-top border-primary w-25 mx-auto my-3"></div>
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-4 fw-bold section-title">About Me</h2>
+                <p class="lead text-muted mt-3">Passionate Backend Developer Building Scalable Solutions</p>
             </div>
 
             <div class="row g-4">
-                <div class="col-12 col-md-8 col-lg-6 mx-auto mb-4">
-    <div class="card h-100 border-0 shadow-sm">
-        <div class="card-body">
-            <h3 class="card-title mb-4">Who I Am</h3>
-            <p class="card-text text-muted mb-4">
-                Seeking a challenging position as a Backend PHP & Laravel Developer in an environment where I
-                can utilize my skills in Programming, Analysis, and Application implementation, while gaining experience
-                working as part of a team and contributing to the organization's success and growth.
-            </p>
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="about-card shadow-sm p-4">
+                        <h3 class="mb-4" style="color: var(--primary);">Who I Am</h3>
+                        <p class="text-muted mb-4">
+                            Seeking a challenging position as a Backend PHP & Laravel Developer in an environment where
+                            I
+                            can utilize my skills in Programming, Analysis, and Application implementation, while
+                            gaining
+                            experience working as part of a team and contributing to the organization's success and
+                            growth.
+                        </p>
 
-            <div class="row text-center">
-                <div class="col-6 col-sm-4 mb-3 mb-sm-0">
-                    <div class="p-3">
-                        <h3 class="text-primary fw-bold">5+</h3>
-                        <p class="text-muted mb-0">Projects</p>
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <div class="stat-box">
+                                    <div class="stat-number" data-target="1">0</div>
+                                    <p class="text-muted mb-0 fw-500">Year+ Experience</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="stat-box">
+                                    <div class="stat-number" data-target="10">0</div>
+                                    <p class="text-muted mb-0 fw-500">Projects Completed</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-3 align-items-center">
+                            <a href="cv/Ahmed_Taha__CV.pdf" download class="btn btn-primary-custom btn-custom">
+                                <i class="fas fa-download me-2"></i>Download CV
+                            </a>
+                            <div class="social-icons">
+                                <a href="https://www.linkedin.com/in/ahmed-taha-alfawakhry/" class="text-dark me-3"
+                                    style="font-size: 1.3rem;">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="https://github.com/Alfawakhry2" class="text-dark" style="font-size: 1.3rem;">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-6 col-sm-4">
-                    <div class="p-3">
-                        <h3 class="text-primary fw-bold">Junior</h3>
-                        <p class="text-muted mb-0">Web Developer</p>
-                    </div>
-                </div>
-            </div>
 
-            <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center mt-4">
-                <a href="cv/Ahmed_Taha__CV.pdf" download class="btn btn-primary me-sm-4 mb-3 mb-sm-0">Download CV</a>
-                <div class="social-icons">
-                    <a href="https://www.linkedin.com/in/ahmed-taha-alfawakhry/" class="text-dark me-3">
-                        <i class="fab fa-linkedin-in fa-lg"></i>
-                    </a>
-                    <a href="https://github.com/Alfawakhry2" class="text-dark">
-                        <i class="fab fa-github fa-lg"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="about-card shadow-sm p-4">
+                        <h3 class="mb-4" style="color: var(--primary);">Technical Skills</h3>
 
+                        <div class="skill-item" data-aos="fade-up" data-aos-delay="100">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-600">PHP & Laravel</span>
+                                <!-- <span class="text-muted">90%</span> -->
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="100"></div>
+                            </div>
+                        </div>
 
-                <div class="col-lg-6">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body">
-                            <h3 class="card-title mb-4 text-primary">Tools</h3>
-                            <div class="row">
-                                
-                                <div class="col-6">
+                        <div class="skill-item" data-aos="fade-up" data-aos-delay="200">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-600">MySQL & Database Design</span>
+                                <!-- <span class="text-muted">85%</span> -->
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="100"></div>
+                            </div>
+                        </div>
 
-                                    <div class="mb-3">
-                                        <h6 class="d-flex justify-content-between">
-                                            <span>PHP</span>
-                                        </h6>
-                                    </div>
-                                    <div class="mb-3">
-                                        <h6 class="d-flex justify-content-between">
-                                            <span>Laravel</span>
+                        <div class="skill-item" data-aos="fade-up" data-aos-delay="300">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-600">RESTful API Development</span>
+                                <!-- <span class="text-muted">88%</span> -->
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="100"></div>
+                            </div>
+                        </div>
 
-                                        </h6>
-                                    </div>
-                                    <div class="mb-3">
-                                        <h6 class="d-flex justify-content-between">
-                                            <span>Composer</span>
+                        <div class="skill-item" data-aos="fade-up" data-aos-delay="400">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-600">Git & Version Control</span>
+                                <!-- <span class="text-muted">80%</span> -->
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="100"></div>
+                            </div>
+                        </div>
 
-                                        </h6>
-                                    </div>
-                                    <div class="mb-3">
-                                        <h6 class="d-flex justify-content-between">
-                                            <span>Docker</span>
+                        <div class="skill-item" data-aos="fade-up" data-aos-delay="500">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-600">Docker & Deployment</span>
+                                <!-- <span class="text-muted">75%</span> -->
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="10"></div>
+                            </div>
+                        </div>
 
-                                        </h6>
-
-
-                                    </div>
-                                    <div class="mb-3">
-                                        <h6 class="d-flex justify-content-between">
-                                            <span>API Documentation(Swagger)</span>
-                                        </h6>
-                                    </div>
-                                    <div class="mb-3">
-                                        <h6 class="d-flex justify-content-between">
-                                            <span>C++ (Problem Solving)</span>
-
-                                        </h6>
-
-                                    </div>
-                                </div>
-                                <div class="col-6">
-
-
-
-                                    <div class="mb-3">
-                                        <h6 class="d-flex justify-content-between">
-                                            <span>MySQL</span>
-                                        </h6>
-                                    </div>
-                                    <div class="mb-3">
-                                        <h6 class="d-flex justify-content-between">
-                                            <span>HTML5</span>
-
-                                        </h6>
-                                    </div>
-                                    <div class="mb-3">
-                                        <h6 class="d-flex justify-content-between">
-                                            <span>CSS3</span>
-
-                                        </h6>
-                                    </div>
-                                    <div class="mb-3">
-                                        <h6 class="d-flex justify-content-between">
-                                            <span>JavaScript</span>
-
-                                        </h6>
-
-
-                                    </div>
-                                    <div class="mb-3">
-                                        <h6 class="d-flex justify-content-between">
-                                            <span>Bootstrap</span>
-                                        </h6>
-                                    </div>
-                                    <div class="mb-3">
-                                        <h6 class="d-flex justify-content-between">
-                                            <span>Git & Github</span>
-
-                                        </h6>
-
-                                    </div>
-                                </div>
+                        <div class="mt-4">
+                            <h5 class="mb-3">Tech Stack:</h5>
+                            <div class="d-flex flex-wrap gap-2">
+                                <span class="badge tech-badge">PHP</span>
+                                <span class="badge tech-badge">Laravel</span>
+                                <span class="badge tech-badge">MySQL</span>
+                                <span class="badge tech-badge">Docker</span>
+                                <span class="badge tech-badge">Composer</span>
+                                <span class="badge tech-badge">Git</span>
+                                <span class="badge tech-badge">Swagger</span>
+                                <span class="badge tech-badge">Postman</span>
+                                <span class="badge tech-badge">Linux</span>
+                                <span class="badge tech-badge">C++</span>
                             </div>
                         </div>
                     </div>
@@ -342,81 +1043,201 @@
         </div>
     </section>
 
+    <!-- Experience Section -->
+    <section class="py-5" id="experience">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-4 fw-bold section-title">Work Experience</h2>
+                <p class="lead text-muted mt-3">My Professional Journey</p>
+            </div>
 
+            <div class="timeline">
+                <!-- Go Grow Company -->
+                <div class="timeline-item" data-aos="fade-up">
+                    <div class="timeline-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <span class="badge bg-primary mb-2">2023 - Present</span>
+                        <h4 class="fw-bold">Backend Developer - PHP & Laravel</h4>
+                        <h5 class="text-primary mb-3">Go Grow Company</h5>
+                        <p class="text-muted mb-3">
+                            Working on multiple production-grade backend systems serving mobile applications and admin
+                            dashboards,
+                            focusing on scalability, security, and clean Laravel architecture.
+                        </p>
+                        <h6 class="fw-bold mb-2">Key Projects:</h6>
+                        <ul class="text-muted">
+                            <li><strong>Thruoo CRM:</strong> Multi-tenant CRM with subdomain-based architecture, RBAC,
+                                and modular design</li>
+                            <li><strong>StayMatch:</strong> Real estate platform with rental workflows, Fawry
+                                integration, wallet system, and real-time chat</li>
+                            <li><strong>Yo Catalog:</strong> Scheduled messaging platform with queue processing,
+                                SMS/WhatsApp integration, and social login</li>
+                        </ul>
+                        <div class="mt-3">
+                            <span class="badge bg-primary me-1">Laravel</span>
+                            <span class="badge bg-primary me-1">Multi-Tenancy</span>
+                            <span class="badge bg-primary me-1">Payment Gateway</span>
+                            <span class="badge bg-primary me-1">Real-time Chat</span>
+                            <span class="badge bg-primary">Firebase</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Freelance Work -->
+                <div class="timeline-item" data-aos="fade-up">
+                    <div class="timeline-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <span class="badge bg-success mb-2">Freelance</span>
+                        <h4 class="fw-bold">Freelance Backend Developer</h4>
+                        <h5 class="text-primary mb-3">Various Clients</h5>
+                        <p class="text-muted mb-3">
+                            Developed custom backend solutions for healthcare and CRM applications with focus on
+                            security,
+                            scalability, and user experience.
+                        </p>
+                        <h6 class="fw-bold mb-2">Featured Projects:</h6>
+                        <ul class="text-muted">
+                            <li><strong>Hayah Home:</strong> Child rehabilitation platform with subscription plans,
+                                Paymob integration, and admin/doctor dashboards using Filament</li>
+                            <li><strong>Itqan CRM:</strong> Enhanced CRM system with notes functionality, search
+                                optimization, and improved team management</li>
+                        </ul>
+                        <div class="mt-3">
+                            <span class="badge bg-success me-1">Laravel</span>
+                            <span class="badge bg-success me-1">Filament</span>
+                            <span class="badge bg-success me-1">Paymob</span>
+                            <span class="badge bg-success">Healthcare</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Services Section -->
-    <section class="py-5" id="services">
+    <section class="py-5 bg-white" id="services">
         <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-4 fw-bold">My Services</h2>
-                <div class="border-top border-primary w-25 mx-auto my-3"></div>
-                <p class="lead text-muted">What I can do for you</p>
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-4 fw-bold section-title">My Services</h2>
+                <p class="lead text-muted mt-3">What I Can Do For You</p>
             </div>
 
             <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm skill-card">
-                        <div class="card-body text-center p-4">
-                            <div
-                                class="icon bg-primary bg-opacity-10 text-primary p-3 rounded-circle mb-4 d-inline-block">
-                                <i class="fas fa-code fa-2x"></i>
-                            </div>
-                            <h4 class="card-title mb-3">Backend Development</h4>
-                            <p class="card-text text-muted">
-                                Building robust server-side applications with Laravel.
-                                Creating RESTful APIs and database architectures.
-                            </p>
-                            <div class="badges mt-3">
-                                <span class="badge bg-primary">Laravel</span>
-                                <span class="badge bg-primary me-1">PHP</span>
-                                <span class="badge bg-primary me-1">MySQL</span>
-                                <span class="badge bg-primary me-1">Docker</span>
-                                <span class="badge bg-primary me-1">Swagger</span>
-                                <span class="badge bg-primary me-1">Composer</span>
-                            </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <h4 class="mb-3 text-center">Backend Development</h4>
+                        <p class="text-muted text-center mb-4">
+                            Building robust server-side applications with Laravel, creating RESTful APIs, and designing
+                            scalable database architectures for web and mobile applications.
+                        </p>
+                        <div class="text-center">
+                            <span class="badge tech-badge me-1">Laravel</span>
+                            <span class="badge tech-badge me-1">PHP</span>
+                            <span class="badge tech-badge me-1">MySQL</span>
+                            <span class="badge tech-badge me-1">Docker</span>
+                            <span class="badge tech-badge">Swagger</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm skill-card">
-                        <div class="card-body text-center p-4">
-                            <div
-                                class="icon bg-primary bg-opacity-10 text-primary p-3 rounded-circle mb-4 d-inline-block">
-                                <i class="fas fa-laptop-code fa-2x"></i>
-                            </div>
-                            <h4 class="card-title mb-3">Frontend Development</h4>
-                            <p class="card-text text-muted">
-                                Creating responsive and interactive user interfaces with HTML5, CSS3,
-                                JavaScript and Bootstrap framework.
-                            </p>
-                            <div class="badges mt-3">
-                                <span class="badge bg-primary me-1">HTML5</span>
-                                <span class="badge bg-primary me-1">CSS3</span>
-                                <span class="badge bg-primary me-1">JavaScript</span>
-                                <span class="badge bg-primary">Bootstrap</span>
-                            </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-code-branch"></i>
+                        </div>
+                        <h4 class="mb-3 text-center">API Development</h4>
+                        <p class="text-muted text-center mb-4">
+                            Designing and implementing secure RESTful APIs with proper authentication, documentation,
+                            and integration with third-party services like payment gateways.
+                        </p>
+                        <div class="text-center">
+                            <span class="badge tech-badge me-1">REST API</span>
+                            <span class="badge tech-badge me-1">JWT</span>
+                            <span class="badge tech-badge me-1">Swagger</span>
+                            <span class="badge tech-badge">Postman</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm skill-card">
-                        <div class="card-body text-center p-4">
-                            <div
-                                class="icon bg-primary bg-opacity-10 text-primary p-3 rounded-circle mb-4 d-inline-block">
-                                <i class="fas fa-bug fa-2x"></i>
-                            </div>
-                            <h4 class="card-title mb-3">Testing & Debugging</h4>
-                            <p class="card-text text-muted">
-                                Comprehensive testing of web applications to ensure functionality,
-                                performance and security standards.
-                            </p>
-                            <div class="badges mt-3">
-                                <span class="badge bg-primary me-1">PHPUnit</span>
-                                <span class="badge bg-primary me-1">Postman</span>
-                                <!-- <span class="badge bg-primary">Swagger</span> -->
-                            </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h4 class="mb-3 text-center">Database Design</h4>
+                        <p class="text-muted text-center mb-4">
+                            Creating efficient database schemas, optimizing queries for performance, and implementing
+                            multi-tenant architectures for scalable applications.
+                        </p>
+                        <div class="text-center">
+                            <span class="badge tech-badge me-1">MySQL</span>
+                            <span class="badge tech-badge me-1">Eloquent ORM</span>
+                            <span class="badge tech-badge me-1">Query Optimization</span>
+                            <span class="badge tech-badge">Multi-Tenancy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <h4 class="mb-3 text-center">Payment Integration</h4>
+                        <p class="text-muted text-center mb-4">
+                            Integrating secure payment gateways (Fawry, Paymob) with wallet systems, transaction
+                            management, and comprehensive payment flow handling.
+                        </p>
+                        <div class="text-center">
+                            <span class="badge tech-badge me-1">Fawry</span>
+                            <span class="badge tech-badge me-1">Paymob</span>
+                            <span class="badge tech-badge me-1">Wallet System</span>
+                            <span class="badge tech-badge">Transactions</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="500">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h4 class="mb-3 text-center">Real-time Features</h4>
+                        <p class="text-muted text-center mb-4">
+                            Implementing real-time chat systems, push notifications with Firebase, and WebSocket
+                            connections for live updates in applications.
+                        </p>
+                        <div class="text-center">
+                            <span class="badge tech-badge me-1">Firebase</span>
+                            <span class="badge tech-badge me-1">WebSockets</span>
+                            <span class="badge tech-badge me-1">Push Notifications</span>
+                            <span class="badge tech-badge">Real-time Chat</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="600">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <h4 class="mb-3 text-center">Testing & Debugging</h4>
+                        <p class="text-muted text-center mb-4">
+                            Comprehensive testing of applications to ensure functionality, performance, and security
+                            standards using modern testing tools and methodologies.
+                        </p>
+                        <div class="text-center">
+                            <span class="badge tech-badge me-1">PHPUnit</span>
+                            <span class="badge tech-badge me-1">Postman</span>
+                            <span class="badge tech-badge me-1">Debugging</span>
+                            <span class="badge tech-badge">Quality Assurance</span>
                         </div>
                     </div>
                 </div>
@@ -425,296 +1246,380 @@
     </section>
 
     <!-- Portfolio Section -->
-    <section class="py-5 bg-white" id="portfolio">
+    <section class="py-5" id="portfolio">
         <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-4 fw-bold">My Projects</h2>
-                <div class="border-top border-primary w-25 mx-auto my-3"></div>
-                <p class="lead text-muted">Some of my recent work</p>
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-4 fw-bold section-title">My Portfolio</h2>
+                <p class="lead text-muted mt-3">Recent Projects & Case Studies</p>
             </div>
 
             <div class="row g-4">
-                <div class="col-md-6 col-lg-4">
-                    <div class="card project-card border-0 shadow-sm h-100">
-                        <img src="images/Your_Home.png" class="card-img-top" alt="E-Train Project">
-                        <div class="card-body">
-                            <h4 class="card-title">Your Home</h4>
-                            <p class="card-text text-muted">
-                                Reserve Your Real Estate From Here ! .
-                            </p>
-                            <div class="badges mb-3">
-                                <span class="badge bg-primary me-1">Laravel 12</span>
-                                <span class="badge bg-primary me-1">Filament v3</span>
-                                <span class="badge bg-primary me-1">Laravel Spatie</span>
-                                <span class="badge bg-primary me-1">MySQL</span>
-                                <span class="badge bg-primary">Livewire</span>
-                                <span class="badge bg-primary">Blade System</span>
+                <!-- Thruoo CRM -->
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="images/Thruoo.png" alt="Thruoo CRM" class="img-fluid">
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    <a href="#" class="project-link">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-transparent border-0">
-                            <a href="https://github.com/Alfawakhry2/Your-Home" class="btn btn-outline-primary">View
-                                Project</a>
+                        <div class="card-body p-4">
+                            <span class="badge bg-warning mb-2">Ongoing</span>
+                            <h4 class="mb-2">Thruoo CRM</h4>
+                            <p class="text-muted mb-3">
+                                Multi-tenant CRM system with subdomain architecture, RBAC, and comprehensive modules
+                                for Sales, Accounting, and HR management.
+                            </p>
+                            <div class="mb-3">
+                                <span class="badge tech-badge me-1">Laravel</span>
+                                <span class="badge tech-badge me-1">Multi-Tenancy</span>
+                                <span class="badge tech-badge me-1">RBAC</span>
+                                <span class="badge tech-badge">CRM</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="card project-card border-0 shadow-sm h-100">
-                        <img src="images/Etraub.png" class="card-img-top" alt="E-Train Project">
-                        <div class="card-body">
-                            <h4 class="card-title">E-Train System</h4>
-                            <p class="card-text text-muted">
-                                Courses Management System.
-                            </p>
-                            <div class="badges mb-3">
-                                <span class="badge bg-primary me-1">Laravel</span>
-                                <span class="badge bg-primary me-1">MySQL</span>
-                                <span class="badge bg-primary">Bootstrap</span>
+                <!-- StayMatch -->
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="images/staymatch.png" alt="StayMatch" class="img-fluid">
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    <a href="#" class="project-link">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-transparent border-0">
-                            <a href="https://github.com/Alfawakhry2/e-train" class="btn btn-outline-primary">View
-                                Project</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-4">
-                    <div class="card project-card border-0 shadow-sm h-100">
-                        <img src="images/Store.png" class="card-img-top" alt="E-Commerce Project">
-                        <div class="card-body">
-                            <h4 class="card-title">E-Commerce Platform</h4>
-                            <p class="card-text text-muted">
-                                Full-featured online store with product management and cart system.
+                        <div class="card-body p-4">
+                            <span class="badge bg-success mb-2">Production</span>
+                            <h4 class="mb-2">StayMatch</h4>
+                            <p class="text-muted mb-3">
+                                Real estate rental platform with multi-role system, price negotiation, wallet
+                                management,
+                                and real-time chat integration.
                             </p>
-                            <div class="badges mb-3">
-                                <span class="badge bg-primary me-1">Laravel</span>
-                                <span class="badge bg-primary me-1">MySQL</span>
-                                <span class="badge bg-primary">bootstrap</span>
+                            <div class="mb-3">
+                                <span class="badge tech-badge me-1">Laravel</span>
+                                <span class="badge tech-badge me-1">Fawry</span>
+                                <span class="badge tech-badge me-1">Firebase</span>
+                                <span class="badge tech-badge">Real-time Chat</span>
                             </div>
-                        </div>
-                        <div class="card-footer bg-transparent border-0">
-                            <a href="https://github.com/Alfawakhry2/e-commerce" class="btn btn-outline-primary">View
-                                Project</a>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="card project-card border-0 shadow-sm h-100">
-                        <img src="images/blogggg.png" class="card-img-top" alt="Blog Project">
-                        <div class="card-body">
-                            <h4 class="card-title">Simple Blog System</h4>
-                            <p class="card-text text-muted">
-                                Content management system for blogging .
-                            </p>
-                            <div class="badges mb-3">
-                                <span class="badge bg-primary me-1">PHP</span>
-                                <span class="badge bg-primary me-1">MySQL</span>
-                                <span class="badge bg-primary">Bootstrap</span>
+
+
+                <!-- Yo Catalog -->
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="images/Catalog.png" alt="Yo Catalog" class="img-fluid">
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    <a href="#" class="project-link">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-transparent border-0">
-                            <a href="https://github.com/Alfawakhry2/Simple_Blog" class="btn btn-outline-primary">View
-                                Project</a>
+                        <div class="card-body p-4">
+                            <span class="badge bg-success mb-2">Production</span>
+                            <h4 class="mb-2">Yo Catalog</h4>
+                            <p class="text-muted mb-3">
+                                Scheduled messaging platform with SMS/WhatsApp integration, payment processing,
+                                and background job handling for message delivery.
+                            </p>
+                            <div class="mb-3">
+                                <span class="badge tech-badge me-1">Laravel</span>
+                                <span class="badge tech-badge me-1">Queues</span>
+                                <span class="badge tech-badge me-1">Fawry</span>
+                                <span class="badge tech-badge">WhatsApp API</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="card project-card border-0 shadow-sm h-100">
-                        <img src="images/todolisttttt.png" class="card-img-top" alt="Blog Project">
-                        <div class="card-body">
-                            <h4 class="card-title">Simple To Do List</h4>
-                            <p class="card-text text-muted">
-                                Add your daily To-Do
-                            </p>
-                            <div class="badges mb-3">
-                                <span class="badge bg-primary me-1">PHP OOP</span>
-                                <span class="badge bg-primary me-1"> PDO</span>
-                                <span class="badge bg-primary me-1">MySQL</span>
-                                <span class="badge bg-primary">Bootstrap</span>
+                <!-- Hayah Home -->
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="images/hayah.png" alt="Hayah Home" class="img-fluid">
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    <a href="#" class="project-link">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-transparent border-0">
-                            <a href="https://github.com/Alfawakhry2/Simple_ToDoList"
-                                class="btn btn-outline-primary">View
-                                Project</a>
+                        <div class="card-body p-4">
+                            <span class="badge bg-primary mb-2">Freelance</span>
+                            <h4 class="mb-2">Hayah Home</h4>
+                            <p class="text-muted mb-3">
+                                Child rehabilitation healthcare platform with subscription management, Paymob
+                                integration,
+                                and admin/doctor dashboards using Filament.
+                            </p>
+                            <div class="mb-3">
+                                <span class="badge tech-badge me-1">Laravel</span>
+                                <span class="badge tech-badge me-1">Filament</span>
+                                <span class="badge tech-badge me-1">Paymob</span>
+                                <span class="badge tech-badge">Healthcare</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Additional project cards can be added here following the same pattern -->
+                <!-- E-Train -->
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="500">
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="images/Etraub.png" alt="E-Train" class="img-fluid">
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    <a href="https://github.com/Alfawakhry2/e-train" class="project-link">
+                                        <i class="fab fa-github"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <span class="badge bg-info mb-2">Personal</span>
+                            <h4 class="mb-2">E-Train System</h4>
+                            <p class="text-muted mb-3">
+                                Comprehensive courses management system with multi-role authentication, course
+                                enrollment,
+                                and admin dashboard with Swagger API documentation.
+                            </p>
+                            <div class="mb-3">
+                                <span class="badge tech-badge me-1">Laravel</span>
+                                <span class="badge tech-badge me-1">Swagger</span>
+                                <span class="badge tech-badge me-1">REST API</span>
+                                <span class="badge tech-badge">MySQL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- E-Commerce -->
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="600">
+                    <div class="project-card">
+                        <div class="project-image">
+                            <img src="images/Store.png" alt="E-Commerce" class="img-fluid">
+                            <div class="project-overlay">
+                                <div class="project-links">
+                                    <a href="https://github.com/Alfawakhry2/e-commerce" class="project-link">
+                                        <i class="fab fa-github"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <span class="badge bg-info mb-2">Personal</span>
+                            <h4 class="mb-2">E-Commerce Platform</h4>
+                            <p class="text-muted mb-3">
+                                Full-featured online store with product management, shopping cart system,
+                                and secure REST API endpoints with Swagger documentation.
+                            </p>
+                            <div class="mb-3">
+                                <span class="badge tech-badge me-1">Laravel</span>
+                                <span class="badge tech-badge me-1">Jetstream</span>
+                                <span class="badge tech-badge me-1">MySQL</span>
+                                <span class="badge tech-badge">Bootstrap</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="text-center mt-5">
-                <a href="https://github.com/Alfawakhry2" class="btn btn-primary btn-lg">View All Projects</a>
+            <div class="text-center mt-5" data-aos="fade-up">
+                <a href="https://github.com/Alfawakhry2" class="btn btn-primary-custom btn-custom">
+                    <i class="fab fa-github me-2"></i>View All Projects on GitHub
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <!-- <section class="py-5" id="testimonials">
+    <!-- Certifications Section -->
+    <section class="py-5 bg-white" id="certifications">
         <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-4 fw-bold">Client Testimonials</h2>
-                <div class="border-top border-primary w-25 mx-auto my-3"></div>
-                <p class="lead text-muted">What people say about my work</p>
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-4 fw-bold section-title">Certifications</h2>
+                <p class="lead text-muted mt-3">My Professional Training & Credentials</p>
             </div>
-            
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card testimonial-card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <img src="images/1.jpg" alt="Client" class="rounded-circle mb-4" width="100">
-                            <h4 class="card-title mb-3">Shalaby</h4>
-                            <h6 class="text-muted mb-4">Frontend Developer</h6>
-                            <p class="card-text text-muted mb-4">
-                                "Ahmed is very skilled in backend development. His code is clean and well-structured. 
-                                I highly recommend working with him on any project."
-                            </p>
-                            <div class="rating text-warning">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
+
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-10 col-lg-8" data-aos="fade-up">
+                    <div class="cert-card shadow-sm">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <div class="cert-image">
+                                    <img src="images/RouteCert.png" class="img-fluid p-3"
+                                        alt="Route Academy Certificate">
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="card testimonial-card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <img src="images/2.jpg" alt="Client" class="rounded-circle mb-4" width="100">
-                            <h4 class="card-title mb-3">Amira</h4>
-                            <h6 class="text-muted mb-4">Amazon Manager</h6>
-                            <p class="card-text text-muted mb-4">
-                                "Ahmed delivered our e-commerce project on time with excellent quality. 
-                                His attention to detail and problem-solving skills are impressive."
-                            </p>
-                            <div class="rating text-warning">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="card testimonial-card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center p-4">
-                            <img src="images/3.jpg" alt="Client" class="rounded-circle mb-4" width="100">
-                            <h4 class="card-title mb-3">Badawy</h4>
-                            <h6 class="text-muted mb-4">Full-stack Developer</h6>
-                            <p class="card-text text-muted mb-4">
-                                "Collaborating with Ahmed was a great experience. His backend expertise 
-                                complemented my frontend skills perfectly on our joint project."
-                            </p>
-                            <div class="rating text-warning">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
+                            <div class="col-md-8">
+                                <div class="card-body p-4">
+                                    <h4 class="mb-2">Backend Development Bootcamp</h4>
+                                    <p class="text-muted mb-3">
+                                        <i class="fas fa-building me-2"></i>Route Academy
+                                        <span class="mx-2">|</span>
+                                        <i class="fas fa-calendar me-2"></i>Completed Dec 2023
+                                    </p>
+                                    <p class="text-muted mb-3">
+                                        Comprehensive backend development training covering PHP, SQL, OOP, PDO, MVC
+                                        architecture,
+                                        WordPress, SDLC methodologies, and Laravel framework with hands-on projects.
+                                    </p>
+                                    <div class="mb-3">
+                                        <span class="badge tech-badge me-1">PHP</span>
+                                        <span class="badge tech-badge me-1">Laravel</span>
+                                        <span class="badge tech-badge me-1">MySQL</span>
+                                        <span class="badge tech-badge me-1">OOP</span>
+                                        <span class="badge tech-badge me-1">MVC</span>
+                                        <span class="badge tech-badge">WordPress</span>
+                                    </div>
+                                    <button class="btn btn-outline-custom btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#certificateModal">
+                                        <i class="fas fa-certificate me-2"></i>View Certificate
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section> -->
+    </section>
+
+    <!-- Certificate Modal -->
+    <div class="modal fade" id="certificateModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Backend Development Bootcamp Certificate</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="images/RouteCert.png" class="img-fluid" alt="Certificate">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="images/Route_Certification.pdf" download class="btn btn-primary-custom">
+                        <i class="fas fa-download me-2"></i>Download
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- CTA Section -->
-    <section class="py-5 bg-primary text-white">
-        <div class="container text-center py-4">
-            <h2 class="display-5 fw-bold mb-4">Have a project in mind?</h2>
-            <p class="lead mb-5">I'm available for freelance projects. Let's work together!</p>
-            <a href="https://www.linkedin.com/in/ahmed-taha-alfawakhry/" class="btn btn-light btn-lg px-4">Get In
-                Touch</a>
+    <section class="py-5 cta-section">
+        <div class="container text-center py-5 position-relative" data-aos="zoom-in">
+            <h2 class="display-5 fw-bold mb-4">Have a Project in Mind?</h2>
+            <p class="lead mb-5">Let's collaborate and build something amazing together!</p>
+            <a href="#contact" class="btn btn-light btn-lg px-5" style="border-radius: 50px;">
+                <i class="fas fa-rocket me-2"></i>Start Your Project
+            </a>
         </div>
     </section>
 
     <!-- Contact Section -->
     <section class="py-5 bg-white" id="contact">
         <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-4 fw-bold">Contact Me</h2>
-                <div class="border-top border-primary w-25 mx-auto my-3"></div>
-                <p class="lead text-muted">Let's build something great together</p>
+            <div class="text-center mb-5" data-aos="fade-up">
+                <h2 class="display-4 fw-bold section-title">Get In Touch</h2>
+                <p class="lead text-muted mt-3">Let's Build Something Great Together</p>
             </div>
 
             <div class="row g-4">
-                <div class="col-lg-5">
-                    <div class="card contact-card h-100 border-0 shadow-sm">
-                        <div class="card-body p-4">
-                            <h3 class="card-title mb-4">Get in Touch</h3>
+                <div class="col-lg-5" data-aos="fade-right">
+                    <div class="contact-card h-100">
+                        <h3 class="mb-4">Contact Information</h3>
 
-                            <div class="d-flex mb-4">
-                                <div class="me-3 text-primary">
-                                    <i class="fas fa-envelope fa-2x"></i>
-                                </div>
-                                <div>
-                                    <h5 class="mb-1">Email</h5>
-                                    <p class="text-muted mb-0">eng.taha168@gmail.com</p>
-                                    <p class="text-muted">ahmedalfawakhry45@gmail.com</p>
-                                </div>
+                        <div class="contact-info-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
                             </div>
+                            <div>
+                                <h5 class="mb-1">Email</h5>
+                                <p class="mb-0">ahmedalfawakhry45@gmail.com</p>
+                                <p class="mb-1">eng.taha168@gmail.com</p>
+                            </div>
+                        </div>
 
-                            <div class="d-flex mb-4">
-                                <div class="me-3 text-primary">
-                                    <i class="fas fa-phone fa-2x"></i>
-                                </div>
-                                <div>
-                                    <h5 class="mb-1">Phone</h5>
-                                    <p class="text-muted mb-0">+20 1155346186</p>
-                                    <p class="text-muted">+20 1096330342</p>
-                                </div>
+                        <div class="contact-info-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
                             </div>
+                            <div>
+                                <h5 class="mb-1">Phone</h5>
+                                <p class="mb-1">+20 1155346186</p>
+                                <p class="mb-0">+20 1096330342</p>
+                            </div>
+                        </div>
 
-                            <div class="d-flex">
-                                <div class="me-3 text-primary">
-                                    <i class="fas fa-map-marker-alt fa-2x"></i>
-                                </div>
-                                <div>
-                                    <h5 class="mb-1">Location</h5>
-                                    <p class="text-muted mb-0">Egypt</p>
-                                    <p class="text-muted">Alsharqia, Belbis, Anshas alraml</p>
-                                </div>
+                        <div class="contact-info-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
                             </div>
+                            <div>
+                                <h5 class="mb-1">Location</h5>
+                                <p class="mb-1">Cairo</p>
+                                <p class="mb-0">Egypt</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-center">
+                            <h5 class="mb-3">Follow Me</h5>
+                            <a href="https://www.linkedin.com/in/ahmed-taha-alfawakhry/"
+                                class="btn btn-primary-custom btn-sm me-2">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="https://github.com/Alfawakhry2" class="btn btn-dark btn-sm">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://www.facebook.com/ahmed.taha.alfawakhry" class="btn btn-primary btn-sm mx-2">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+
+   
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-7">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body p-4">
-                            <h3 class="card-title mb-4">Send Me a Message</h3>
-                            <form>
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control form-control-lg" placeholder="Your Name">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="email" class="form-control form-control-lg"
-                                            placeholder="Your Email">
-                                    </div>
-                                    <div class="col-12">
-                                        <input type="text" class="form-control form-control-lg" placeholder="Subject">
-                                    </div>
-                                    <div class="col-12">
-                                        <textarea class="form-control form-control-lg" rows="5"
-                                            placeholder="Your Message"></textarea>
-                                    </div>
-                                    <div class="col-12">
-                                        <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
-                                    </div>
+                <div class="col-lg-7" data-aos="fade-left">
+                    <div class="contact-card">
+                        <h3 class="mb-4">Send Me a Message</h3>
+                        <form id="contactForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" placeholder="Your Name" required>
                                 </div>
-                            </form>
-                        </div>
+                                <div class="col-md-6">
+                                    <input type="email" class="form-control" placeholder="Your Email" required>
+                                </div>
+                                <div class="col-12">
+                                    <input type="text" class="form-control" placeholder="Subject" required>
+                                </div>
+                                <div class="col-12">
+                                    <textarea class="form-control" rows="5" placeholder="Your Message"
+                                        required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary-custom btn-custom w-100">
+                                        <i class="fas fa-paper-plane me-2"></i>Send Message
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -722,14 +1627,202 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-4 bg-dark text-white">
+    <footer class="py-4">
         <div class="container text-center">
-            <p class="mb-0">&copy; 2024 Ahmed Taha. All rights reserved.</p>
+            <p class="mb-2">&copy; 2024 Ahmed Taha Mansour. All rights reserved.</p>
+            <p class="mb-0 text-muted">Built with <i class="fas fa-heart text-danger"></i> and Laravel</p>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Loading Screen
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.classList.add('hidden');
+            }, 1000);
+        });
+
+        // Typing Effect
+        const typedText = document.getElementById('typed-text');
+        const texts = [
+            'Backend Developer',
+            // 'Laravel Expert',
+            'PHP/Laravel Developer',
+            'API Specialist',
+            'Problem Solver'
+        ];
+        let textIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function type() {
+            const currentText = texts[textIndex];
+
+            if (isDeleting) {
+                typedText.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typedText.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentText.length) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % texts.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(type, typeSpeed);
+        }
+
+        // Start typing effect after page loads
+        setTimeout(type, 1500);
+
+        // Navbar Scroll Effect
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Active Nav Link
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Scroll to Top Button
+        const scrollTopBtn = document.getElementById('scrollTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Counter Animation
+        const counters = document.querySelectorAll('.stat-number');
+        const speed = 200;
+        let hasAnimated = false;
+
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const increment = target / speed;
+
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + increment);
+                    setTimeout(() => animateCounters(), 10);
+                } else {
+                    counter.innerText = target + '+';
+                }
+            });
+        };
+
+        // Observe counters
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !hasAnimated) {
+                    hasAnimated = true;
+                    animateCounters();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        counters.forEach(counter => counterObserver.observe(counter));
+
+        // Skill Bar Animation
+        const skillBars = document.querySelectorAll('.skill-progress');
+
+        const skillObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const width = entry.target.getAttribute('data-width');
+                    entry.target.style.width = width + '%';
+                }
+            });
+        }, { threshold: 0.5 });
+
+        skillBars.forEach(bar => skillObserver.observe(bar));
+
+        // Form Submission
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your message! I will get back to you soon.');
+            contactForm.reset();
+        });
+
+        // Smooth Scroll for Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add hover effects to social links
+        document.querySelectorAll('.social-icons a, .navbar-brand, .btn').forEach(element => {
+            element.addEventListener('mouseenter', function () {
+                this.style.transform = 'scale(1.1)';
+            });
+            element.addEventListener('mouseleave', function () {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
 </body>
 
 </html>
